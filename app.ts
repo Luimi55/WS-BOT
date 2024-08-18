@@ -1,5 +1,6 @@
 import type {Conversation} from './models/Conversation'
 import type {Message} from './models/Message'
+import messagesData from './data/messages.json' assert { type: 'json' };
 
 const qrcode = require('qrcode-terminal');
 
@@ -9,39 +10,7 @@ const client = new Client({
     authStrategy: new LocalAuth()
 });
 
-let messages: Message[] = [
-    {
-        id: "0",
-        text: "Hola elija una opcion:\nElejir 1\nElejir 2",
-        validValues: ["1", "2"]
-    },
-    {
-        id: "1",
-        text: "Opcion 1:\nElejir 1\nElejir 2",
-        validValues: ["1", "2"]
-    },
-    {
-        id: "2",
-        text: "Opcion 2\nElejir 1",
-        validValues: ["1"]
-    },
-    {
-        id: "1.1",
-        text: "Opcion 1.1:\nFin",
-        validValues: []
-    },
-    {
-        id: "1.2",
-        text: "Opcion 1.2:\nFin",
-        validValues: []
-    },
-    {
-        id: "2.1",
-        text: "Opcion 2.1:\nFin",
-        validValues: []
-    },
-
-]
+let messages: Message[] = messagesData;
 
 let conversations: Conversation[] = [];
 

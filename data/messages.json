@@ -1,0 +1,32 @@
+[
+    {
+        "id": "0",
+        "text": "Hola elija una opcion:\nElejir 1\nElejir 2",
+        "validValues": ["1", "2"]
+    },
+    {
+        "id": "1",
+        "text": "Opcion 1:\nElejir 1\nElejir 2",
+        "validValues": ["1", "2"]
+    },
+    {
+        "id": "2",
+        "text": "Opcion 2\nElejir 1",
+        "validValues": ["1"]
+    },
+    {
+        "id": "1.1",
+        "text": "Opcion 1.1:\nFin",
+        "validValues": []
+    },
+    {
+        "id": "1.2",
+        "text": "Opcion 1.2:\nFin",
+        "validValues": []
+    },
+    {
+        "id": "2.1",
+        "text": "Opcion 2.1:\nFin",
+        "validValues": []
+    }
+]
