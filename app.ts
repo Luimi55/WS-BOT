@@ -21,7 +21,6 @@ let conversations: Conversation[] = [];
 
 client.on('ready', () => {
     log.WriteLog('Client is ready!')
-    log.WriteLog('1:')
 });
 
 client.on('qr', qr => {
@@ -32,6 +31,7 @@ client.on('message_create', msg => {
     try {
         const conversation: Conversation | undefined = conversations.find(conv => conv.userId == msg.from);
         if (msg.body.includes('!nexo')) {
+            log.WriteLog('message_create')
 
             if (conversation === undefined) {
                 conversations.push({

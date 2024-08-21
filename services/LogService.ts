@@ -29,9 +29,9 @@ const LogService = () => {
       
       CreateLogFileIfNotExist(fullPath)
 
-      const logText = `${date.toISOString()} ${log}`;
+      const logText = `${date.toISOString()} ${log}\n`;
 
-      fs.writeFile(fullPath, logText, (error: any) => {
+      fs.appendFile(fullPath, logText, (error: any) => {
         if (error) throw error;
           console.log(logText)
       });
