@@ -1,6 +1,7 @@
 import type {Conversation} from './models/Conversation'
 import type {Message} from './models/Message'
-import messagesData from './data/messages.json' assert { type: 'json' };
+import messagesData from './conf/messages.json' assert { type: 'json' };
+import LogService from './services/LogService';
 
 const qrcode = require('qrcode-terminal');
 
@@ -10,13 +11,15 @@ const client = new Client({
     authStrategy: new LocalAuth()
 });
 
+const log = LogService();
+
 let messages: Message[] = messagesData;
 
 let conversations: Conversation[] = [];
 
 
 client.on('ready', () => {
-    console.log('Client is ready!');
+    log.WriteLog('Client is ready!')
 });
 
 client.on('qr', qr => {
@@ -72,4 +75,15 @@ client.on('message_create', msg => {
     }
 });
 
-client.initialize();
+const main = () => {
+    try {
+        log.CreateDirIfNotExist();
+        client.initialize();
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+main();
+
+
