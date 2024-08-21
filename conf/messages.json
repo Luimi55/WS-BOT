@@ -2,31 +2,41 @@
     {
         "id": "0",
         "text": "Hola elija una opcion:\nElejir 1\nElejir 2",
-        "validValues": ["1", "2"]
+        "options": [
+            {"option": "1", "messageId": "1"},
+            {"option": "2", "messageId": "2"}
+        ]
     },
     {
         "id": "1",
-        "text": "Opcion 1:\nElejir 1\nElejir 2",
-        "validValues": ["1", "2"]
+        "text": "Opcion 1:\nElejir 1\nElejir 2\nElejir 3: Menu principal",
+        "options": [
+            {"option": "1", "messageId": "1.1"},
+            {"option": "2", "messageId": "1.2"},
+            {"option": "3", "messageId": "0"}
+        ]
     },
     {
         "id": "2",
-        "text": "Opcion 2\nElejir 1",
-        "validValues": ["1"]
+        "text": "Opcion 2\nElejir 1\nElejir 2: Menu principal",
+        "options": [
+            {"option": "1", "messageId": "2.1"},
+            {"option": "2", "messageId": "0"}
+        ]
     },
     {
         "id": "1.1",
         "text": "Opcion 1.1:\nFin",
-        "validValues": []
+        "options": []
     },
     {
         "id": "1.2",
         "text": "Opcion 1.2:\nFin",
-        "validValues": []
+        "options": []
     },
     {
         "id": "2.1",
         "text": "Opcion 2.1:\nFin",
-        "validValues": []
+        "options": []
     }
 ]

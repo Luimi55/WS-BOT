@@ -1,5 +1,7 @@
+import { Option } from "./Option"
+
 export interface Message {
     id : string,
     text : string,
-    validValues: string[]
+    options: Option[]
 }

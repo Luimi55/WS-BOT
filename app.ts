@@ -2,6 +2,7 @@ import type {Conversation} from './models/Conversation'
 import type {Message} from './models/Message'
 import messagesData from './conf/messages.json' assert { type: 'json' };
 import LogService from './services/LogService';
+import { Option } from './models/Option';
 
 const qrcode = require('qrcode-terminal');
 
@@ -20,6 +21,7 @@ let conversations: Conversation[] = [];
 
 client.on('ready', () => {
     log.WriteLog('Client is ready!')
+    log.WriteLog('1:')
 });
 
 client.on('qr', qr => {
@@ -42,17 +44,9 @@ client.on('message_create', msg => {
         } else {
             if (conversation != undefined) {
                 let lastSentMessage: Message | undefined = messages.find(messsage => messsage.id == conversation.lastMessageId);
-                let isValidResponse: boolean | undefined = lastSentMessage?.validValues.some(val => val == msg.body);
-                if (isValidResponse) {
-                    let nextMessage: Message | undefined;
-                    let nextMessageId: string;
-                    if (lastSentMessage?.id == "0") {
-                        nextMessageId = msg.body;
-                        nextMessage = messages.find(messsage => messsage.id == msg.body);
-                    } else {
-                        nextMessageId = `${conversation.lastMessageId}.${msg.body}`;
-                        nextMessage = messages.find(messsage => messsage.id == nextMessageId);
-                    }
+                let foundOption: Option | undefined = lastSentMessage?.options.find(opt=>opt.option == msg.body);
+                if (foundOption != undefined) {
+                    let nextMessage: Message | undefined = messages.find(message=>message.id == foundOption.messageId);
                     if(nextMessage != undefined){
                         client.sendMessage(conversation.userId, nextMessage.text);
                         conversations.map(newConv => {
@@ -62,8 +56,7 @@ client.on('message_create', msg => {
                             }
                         )
                     } else {
-                        // Log: Error tecnico: El id nextMessageId no esta configurado en el JSON de mensajes
-                        //client.sendMessage(conversation.userId, 'Ha ocurrido un error. Favor intentar en unos segundos.');
+                        log.WriteLog('Error tecnico: El id nextMessageId no esta configurado en el JSON de mensajes')
                     }
                 } else {
                     //client.sendMessage(conversation.userId, 'Esa opción no existe');
@@ -71,7 +64,7 @@ client.on('message_create', msg => {
             }
         }
     } catch (ex) {
-        console.log(ex)
+        log.WriteLog(ex)
     }
 });
 
