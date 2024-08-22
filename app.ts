@@ -43,24 +43,30 @@ client.on('message_create', msg => {
 
         } else {
             if (conversation != undefined) {
+                
                 let lastSentMessage: Message | undefined = messages.find(messsage => messsage.id == conversation.lastMessageId);
-                let foundOption: Option | undefined = lastSentMessage?.options.find(opt=>opt.option == msg.body);
-                if (foundOption != undefined) {
-                    let nextMessage: Message | undefined = messages.find(message=>message.id == foundOption.messageId);
-                    if(nextMessage != undefined){
-                        client.sendMessage(conversation.userId, nextMessage.text);
-                        conversations.map(newConv => {
-                                if (newConv.userId = conversation.userId) {
-                                    newConv.lastMessageId = nextMessage.id
+                if(lastSentMessage != undefined){
+                    let foundOption: Option | undefined = lastSentMessage.options.find(opt=>opt.option == msg.body);
+                    if (foundOption != undefined) {
+                        let nextMessage: Message | undefined = messages.find(message=>message.id == foundOption.messageId);
+                        if(nextMessage != undefined){
+                            client.sendMessage(conversation.userId, nextMessage.text);
+                            conversations.map(newConv => {
+                                    if (newConv.userId = conversation.userId) {
+                                        newConv.lastMessageId = nextMessage.id
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        } else {
+                            log.WriteLog(`Technical error: MessageId ${foundOption.messageId} is not configured in messages.json`)
+                        }
                     } else {
-                        log.WriteLog(`Error tecnico: El messageId ${foundOption.messageId} no esta configurado en el JSON de mensajes`)
+                        //client.sendMessage(conversation.userId, 'Esa opción no existe');
                     }
                 } else {
-                    //client.sendMessage(conversation.userId, 'Esa opción no existe');
+                    log.WriteLog(`Technical error: The las sent message id ${conversation.lastMessageId} not found in messages.json`)
                 }
+
             }
         }
     } catch (ex) {
