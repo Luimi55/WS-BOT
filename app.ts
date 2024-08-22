@@ -56,7 +56,7 @@ client.on('message_create', msg => {
                             }
                         )
                     } else {
-                        log.WriteLog('Error tecnico: El id nextMessageId no esta configurado en el JSON de mensajes')
+                        log.WriteLog(`Error tecnico: El messageId ${foundOption.messageId} no esta configurado en el JSON de mensajes`)
                     }
                 } else {
                     //client.sendMessage(conversation.userId, 'Esa opción no existe');

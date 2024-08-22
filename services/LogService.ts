@@ -1,14 +1,16 @@
 const fs = require('node:fs');
 import configurations from '../conf/config.json' assert { type: 'json' };
+import DateHelper from '../helpers/DateHelper';
 
-const path = configurations.LogDir;
+const {LogDir, TimeZone} = configurations;
+const dateHelper = DateHelper();
 
 const LogService = () => {
 
   const CreateDirIfNotExist = () => {
-    if(configurations.LogDir != ""){
-      if (!fs.existsSync(path)){
-        fs.mkdirSync(path);
+    if(LogDir != ""){
+      if (!fs.existsSync(LogDir)){
+        fs.mkdirSync(LogDir);
       }
     } else {
       throw 'Config error: LogDir is not specified'
@@ -19,17 +21,17 @@ const LogService = () => {
   const WriteLog = (log : string) => {
 
     try {
-      const date = new Date();//Fix date
+      const date = dateHelper.GetTimeZoneDate(TimeZone);
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
   
       const fileName = `${year}-${month}-${day}`;
-      const fullPath = `${path}/${fileName}`;
+      const fullPath = `${LogDir}/${fileName}`;
       
       CreateLogFileIfNotExist(fullPath)
 
-      const logText = `${date.toISOString()} ${log}\n`;
+      const logText = `${dateHelper.GetTimeZoneString(TimeZone)} - ${log}\n`;
 
       fs.appendFile(fullPath, logText, (error: any) => {
         if (error) throw error;
