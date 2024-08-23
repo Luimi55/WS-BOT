@@ -31,7 +31,6 @@ client.on('message_create', msg => {
     try {
         const conversation: Conversation | undefined = conversations.find(conv => conv.userId == msg.from);
         if (msg.body.includes('!nexo')) {
-            log.WriteLog('message_create')
 
             if (conversation === undefined) {
                 conversations.push({
@@ -43,25 +42,17 @@ client.on('message_create', msg => {
 
         } else {
             if (conversation != undefined) {
-                
+
                 let lastSentMessage: Message | undefined = messages.find(messsage => messsage.id == conversation.lastMessageId);
                 if(lastSentMessage != undefined){
                     let foundOption: Option | undefined = lastSentMessage.options.find(opt=>opt.option == msg.body);
                     if (foundOption != undefined) {
-                        let nextMessage: Message | undefined = messages.find(message=>message.id == foundOption.messageId);
-                        if(nextMessage != undefined){
-                            client.sendMessage(conversation.userId, nextMessage.text);
-                            conversations.map(newConv => {
-                                    if (newConv.userId = conversation.userId) {
-                                        newConv.lastMessageId = nextMessage.id
-                                    }
-                                }
-                            )
-                        } else {
-                            log.WriteLog(`Technical error: MessageId ${foundOption.messageId} is not configured in messages.json`)
+                        let sentMessage : Message | undefined = SendMessageAndUpdateConversation(foundOption.messageId, conversation);
+                        if(sentMessage != undefined && sentMessage.options.length == 0){
+                            setTimeout(()=>SendMessageAndUpdateConversation('0', conversation),500);
                         }
                     } else {
-                        //client.sendMessage(conversation.userId, 'Esa opción no existe');
+                        client.sendMessage(conversation.userId, 'Esa opción no existe');
                     }
                 } else {
                     log.WriteLog(`Technical error: The las sent message id ${conversation.lastMessageId} not found in messages.json`)
@@ -73,6 +64,22 @@ client.on('message_create', msg => {
         log.WriteLog(ex)
     }
 });
+
+const SendMessageAndUpdateConversation = (messageId : string, conversation : Conversation) : Message | undefined  => {
+    let nextMessage: Message | undefined = messages.find(message=>message.id == messageId);
+    if(nextMessage != undefined){
+        client.sendMessage(conversation.userId, nextMessage.text);
+        conversations.map(newConv => {
+                if (newConv.userId = conversation.userId) {
+                    newConv.lastMessageId = nextMessage.id
+                }
+            }
+        )
+    } else {
+        log.WriteLog(`Technical error: MessageId ${messageId} is not configured in messages.json`)
+    }
+    return nextMessage;
+}
 
 const main = () => {
     try {
